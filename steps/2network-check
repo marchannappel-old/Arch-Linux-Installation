@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Might be problematic
+function checkNet() {
+    HOSTNAME="google.com"
+
+    while ! ping -c1 HOSTNAME &>/dev/null
+        do echo "Ping Fail - `date`"
+    done
+    echo "Host Found - `date`"
+}

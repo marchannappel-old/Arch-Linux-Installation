@@ -1,0 +1,68 @@
+#!/bin/bash
+
+# Creates disk partition table for EFI systems
+function partitionDiskEFI() {
+    cleanDevice
+
+    partitionBoot
+
+    partitionSwap
+    
+    partitionRoot
+}
+
+# Creates disk partition table for BIOS systems
+function partitionDiskBIOS() {
+    cleanDevice
+
+    echo "Starting to create grub partition..."
+    sgdisk -n 0:0:+1MiB -t 0:ef02 -c 1:GRUB /dev/sda
+    echo "Boot partition was created sucessfully"
+
+    partitionBoot
+
+    partitionSwap
+    
+    partitionRoot
+}
+
+function cleanDevice() {
+    echo "Wiping existing partitions from your device..."
+    sgdisk --zap-all /dev/sda
+    echo "Your device is clean now"
+}
+
+function partitionBoot() {
+    echo "Starting to create boot partition..."
+    sgdisk -n 0:0:+1GiB -t 0:ef00 -c 1:BOOT /dev/sda
+    echo "Boot partition was created sucessfully"
+}
+
+function partitionSwap() {
+    echo "Do you need a Swap partition ?"
+    read SWAPACTIVE
+
+    if [[ -z "$SWAPACTIVE"]]; then
+        echo "How large is your RAM (add GiB at the end of the number, example: 6GiB)?"
+        read RAM_SIZE
+
+        echo "Starting to create swap partition with your RAM size..."
+        sgdisk -n 0:0:+$RAM_SIZE -t 0:8200 -c 0:SWAP /dev/sda #Variable might cause problems!
+        echo "Swap partition was created successfully"
+    elif [[ "$SWAPACTIVE" == "yes"]]; then
+        echo "How large is your RAM (add GiB at the end of the number, example: 6GiB)?"
+        read RAM_SIZE
+        
+        echo "Starting to create swap partition with your RAM size..."
+        sgdisk -n 0:0:+$RAM_SIZE -t 0:8200 -c 0:SWAP /dev/sda #Variable might cause problems!
+        echo "Swap partition was created successfully"
+    else
+        echo "Skipping Swap partitioning, you can add an swap file later if you want"
+    fi
+}
+
+function partitionRoot() {
+    echo "Starting to create root partition..."
+    sgdisk -n 0:0:0 -t 0:8300 -c 0:ROOT /dev/sda
+    echo "Root partition created successfully"
+}
