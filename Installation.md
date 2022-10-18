@@ -313,5 +313,8 @@ mkinitcpio -p linux-lts
 **Shell (ZSH)([Nordic Console Colors](https://store.kde.org/p/1329371))**
 
 **Wallpaper (dynamic if possible)**
+- https://store.kde.org/p/1884164
+- https://store.kde.org/p/1891586
+- https://www.xfce-look.org/p/1387809
 
 **Fonts**
