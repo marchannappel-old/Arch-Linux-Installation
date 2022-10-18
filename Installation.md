@@ -318,3 +318,7 @@ mkinitcpio -p linux-lts
 - https://www.xfce-look.org/p/1387809
 
 **Fonts**
+
+**Application Themes**
+- https://draculatheme.com/obsidian
+- https://draculatheme.com/git
