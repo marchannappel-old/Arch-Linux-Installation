@@ -9,6 +9,8 @@ function partitionDiskEFI() {
     partitionSwap
     
     partitionRoot
+
+    printPartitions
 }
 
 # Creates disk partition table for BIOS systems
@@ -24,12 +26,18 @@ function partitionDiskBIOS() {
     partitionSwap
     
     partitionRoot
+
+    printPartitions
 }
 
 function cleanDevice() {
     echo "Wiping existing partitions from your device..."
     sgdisk --zap-all /dev/sda
     echo "Your device is clean now"
+}
+
+function printPartitions() {
+    sgdisk -p /dev/sda
 }
 
 function partitionBoot() {

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+function createFsEFI() {
+    mkfs.fat -F 32 -n BOOT /dev/sda1
+    mkswap -L SWAP /dev/sda2
+    mkfs.ext4 -L ROOT /dev/sda3
+}
+
+function createFsBIOS() {
+    mkfs.ext4 -L GRUB /dev/sda1
+    mkfs.fat -F 32 -n BOOT /dev/sda2
+    mkswap -L SWAP /dev/sda3
+    mkfs.ext4 -L ROOT /dev/sda4
+}

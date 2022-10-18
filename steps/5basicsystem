@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Mounting partitions
+func mountEFI() {
+    mount -L ROOT /mnt
+    mkdir /mnt/boot
+    mount -L BOOT /mnt/boot
+    swapon -L SWAP # TODO: should only be possible if swap is active
+}
+
+
+# Install basic packages by CPU type
+# TODO: check if pacstrap needs a -y flag
+function installBasicPackages() {
+    CPU=${lscpu | grep "Model name"}
+
+    if [[ "$CPU" == *"Intel" ]]; then
+        echo "Installing basic packages for Intel CPU systems..."
+        pacstrap /mnt base base-devel linux-lts linux-firmware dhcpcd nano iwd intel-ucode
+        wait
+        echo "Installation complete"
+    else
+        echo "Installing basic packages for AMD CPU systems..."
+        pacstrap /mnt base base-devel linux-lts linux-firmware dhcpcd nano iwd amd-ucode
+        wait
+        echo "Installation complete"
+    fi
+}
+
+# Generate Fstab
+function generateFsTab() {
+    genfstab -U /mnt > /mnt/etc/fstab
+    cat /mnt/etc/fstab #DEBUG: Remove this later
+}
